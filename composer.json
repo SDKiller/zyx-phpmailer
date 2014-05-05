@@ -1,0 +1,25 @@
+{
+    "name": "zyx/zyx-phpmailer",
+    "description": "PHPMailer integration for Yii 2 framework",
+    "keywords": ["yii2", "phpmailer", "mail", "email", "mailer"],
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/SDKiller/zyx-phpmailer/issues",
+        "wiki": "https://github.com/SDKiller/zyx-phpmailer/wiki",
+        "source": "https://github.com/SDKiller/zyx-phpmailer"
+    },
+    "authors": [
+        {
+            "name": "Serge Postrash aka SDKiller",
+            "email": "jexy.ru@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "phpmailer/phpmailer": "*"
+    },
+    "autoload": {
+        "psr-4": { "zyx\\phpmailer\\": "" }
+    }
+}
