@@ -66,6 +66,16 @@ or
 to the require section of your composer.json.
 
 
+**Note:** this can be affected by 'minimum-stability' settings in your project root composer.json file. If you see error
+trying to install 'dev-master' branch of PHPMailer you should explicitly point to it, adding
+
+```
+"phpmailer/phpmailer": "dev-master"
+```
+
+to the require section of composer.json in your project root.
+
+
 
 ### Install from an Archive File
 
