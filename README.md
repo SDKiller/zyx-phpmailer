@@ -41,7 +41,7 @@ So, either run
 - for PHPMailer stable:
 
 ```
-php composer.phar require --prefer-dist zyx/zyx-phpmailer "dev-stable"
+php composer.phar require --prefer-dist zyx/zyx-phpmailer "@stable"
 ```
 
 - for dev:
@@ -54,7 +54,7 @@ php composer.phar require --prefer-dist zyx/zyx-phpmailer "dev-master"
 or add respectively:
 
 ```
-"zyx/zyx-phpmailer": "dev-stable"
+"zyx/zyx-phpmailer": "@stable"
 ```
 
 or
