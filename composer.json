@@ -17,7 +17,7 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "phpmailer/phpmailer": "*"
+        "phpmailer/phpmailer": "@stable"
     },
     "autoload": {
         "psr-4": { "zyx\\phpmailer\\": "" }
