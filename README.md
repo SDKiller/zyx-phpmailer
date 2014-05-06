@@ -1,7 +1,3 @@
-WORK IN PROGRESS!!! REPOSITORIES ARE NOT SET YET!!!
-===================================================
-
-
 zyx-phpmailer
 =============
 
@@ -51,7 +47,7 @@ php composer.phar require --prefer-dist zyx/zyx-phpmailer "@stable"
 - for dev:
 
 ```
-php composer.phar require --prefer-dist zyx/zyx-phpmailer "*"
+php composer.phar require --prefer-dist zyx/zyx-phpmailer "dev-master"
 ```
 
 
@@ -64,7 +60,7 @@ or add respectively:
 or
 
 ```
-"zyx/zyx-phpmailer": "*"
+"zyx/zyx-phpmailer": "dev-master"
 ```
 
 to the require section of your composer.json.
@@ -85,17 +81,21 @@ One of the benefits of installing via Composer is automation of autoload setup.
 If you install extension and PHPMailer library from archive files, you'll have to setup autoload paths manually.
 
 **Note:** currently PHPMailer does not support namespaces (as its minimum requirements is php 5.0), but provides an
-SPL-compatible autoloader, and
-> the preferred way of loading the library - just `require '/path/to/PHPMailerAutoload.php';` and everything should work.
+SPL-compatible autoloader, and...
+> the preferred way of loading the library - just `require '/path/to/PHPMailerAutoload.php';` and everything should work
+
+For further information refer to PHPMailer documentation.
 
 
 CONFIGURING
 ------------
 
 TODO
+====
 
 
 USAGE
 ------------
 
 TODO
+====
