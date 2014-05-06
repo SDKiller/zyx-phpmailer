@@ -130,8 +130,10 @@ This is the tipical configuration for sending email via smtp.
 If you are familiar with PHPMailer, you can see that 'config' array holds settings, similar to corresponding
 PHPMailer properties. They will be populated when Mailer is initialized.
 
-You can for example define ```'mailer' => 'mail'``` or ```'mailer' => 'sendmail', 'sendmail' => '/path/to/sendmail'```
-in it - just like in PHPMailer.
+You can for example define
+```'mailer' => 'mail'``` or
+
+```'mailer' => 'sendmail', 'sendmail' => '/path/to/sendmail'```  - just like in PHPMailer.
 
 You may also configure some default message settings for your application in 'messageConfig' array.
 They will be populated on message creation.
