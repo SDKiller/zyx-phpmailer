@@ -100,12 +100,92 @@ For further information refer to PHPMailer documentation.
 CONFIGURING
 ------------
 
-TODO
-====
+
+To use this extension, you should add some settings in your application configuration file.
+It may be like the following:
+
+```
+return [
+//....
+	'components' => [
+        'mail' => [
+            'class'            => 'zyx\phpmailer\Mailer',
+            'viewPath'         => '@common/mail',
+            'useFileTransport' => false,
+            'config'           => [
+                'mailer'     => 'smtp',
+                'host'       => 'smtp.yandex.ru',
+                'port'       => '465',
+                'smtpsecure' => 'ssl',
+                'smtpauth'   => true,
+                'username'   => 'mysmtplogin@example.ru',
+                'password'   => 'mYsmTpPassword',
+            ],
+        ],
+	],
+];
+```
+
+This is the tipical configuration for sending email via smtp.
+If you are familiar with PHPMailer, you can see that 'config' array holds settings, similar to corresponding
+PHPMailer properties. They will be populated when Mailer is initialized.
+
+You can for example define
+
+```'mailer' => 'mail'``` or
+
+```'mailer' => 'sendmail', 'sendmail' => '/path/to/sendmail'```  - just like in PHPMailer.
+
+You may also configure some default message settings for your application in 'messageConfig' array.
+They will be populated at the moment of message creation.
+
+For example, you may predefine default contents of 'From' email field - so you will not have to set 'From'
+it every time when composing message:
+
+```
+    ...
+    'mail' => [
+        ...
+        'messageConfig'    => [
+         'from' => ['noreply@example.com' => 'My Example Site']
+        ],
+        ...
+    ],
+    ...
+```
+
 
 
 USAGE
 ------------
 
-TODO
-====
+Example of simple usage:
+
+```
+Yii::$app->mail->compose()
+     ->setFrom(['noreply@example.com' => 'My Example Site'])
+     ->setTo([$form->email => $form->name])
+     ->setSubject($form->subject)
+     ->setTextBody($form->text)
+     ->send();
+```
+
+Example of sending html emails rendering view and layout (assumed that default 'From' is set in application configuration file):
+
+```
+Yii::$app->mail->compose('passwordResetToken', ['user'       => $user,
+                                                'title'      => Yii::t('app', 'Password reset'),
+                                                'htmlLayout' => 'layouts/html-reset'])
+                ->setTo($this->email)
+                ->setSubject(Yii::t('app', 'Password reset for ') . Yii::$app->params['siteName'])
+                ->send();
+```
+
+**Note:** possibility to set 'htmlLayout' dynamically when composing message is not the native behavior of `BaseMailer`.
+This feature was introduced in this specific extension and is experimental.
+
+
+For more examples of usage you may refer to documentation on Yii 2 `BaseMailer` and `BaseMessage` and PHPDoc blocks in
+the extension files.
+
+Additionally some wiki articles coming soon.
