@@ -4,6 +4,13 @@ zyx-phpmailer
 PHPMailer integration for Yii 2 framework
 -----------------------------------------
 
+[![Latest Stable Version](https://poser.pugx.org/zyx/zyx-phpmailer/v/stable.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
+[![Latest Unstable Version](https://poser.pugx.org/zyx/zyx-phpmailer/v/unstable.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
+[![Total Downloads](https://poser.pugx.org/zyx/zyx-phpmailer/downloads.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
+[![License](https://poser.pugx.org/zyx/zyx-phpmailer/license.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
+
+
+
 This extension adds integration of popular **[PHPMailer](https://github.com/PHPMailer/PHPMailer)** library -
 a _"full-featured email creation and transfer class for PHP"_ - to **[Yii 2 framework](https://github.com/yiisoft/yii2)**.
 
@@ -188,4 +195,4 @@ This feature was introduced in this specific extension and is experimental.
 For more examples of usage you may refer to documentation on Yii 2 `BaseMailer` and `BaseMessage` and PHPDoc blocks in
 the extension files.
 
-Additionally some wiki articles coming soon.
+Additionally some **[Wiki](https://github.com/SDKiller/zyx-phpmailer/wiki)** articles are available.

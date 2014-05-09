@@ -310,7 +310,7 @@ class Message extends BaseMessage
 
     /**
      * Attaches existing file to the email message.
-     * @param string $path full file name
+     * @param string $path full file name or path alias
      * @param array $options options for embed file. Valid options are:
      *
      * - fileName: name, which should be used to attach file.
@@ -326,7 +326,7 @@ class Message extends BaseMessage
         $encoding    = isset($options['encoding']) ? $options['encoding'] : 'base64';
         $disposition = isset($options['disposition']) ? $options['disposition'] : 'attachment';
 
-        $this->mailer->adapter->addAttachment($path, $name, $encoding, $type, $disposition);
+        $this->mailer->adapter->addAttachment(\Yii::getAlias($path, false), $name, $encoding, $type, $disposition);
 
         return $this;
     }
@@ -356,7 +356,7 @@ class Message extends BaseMessage
     /**
      * Attach a file and return it's CID source.
      * This method should be used when embedding images or other data in a message.
-     * @param string $path file name.
+     * @param string $path full file name or path alias
      * @param array $options options for embed file. Valid options are:
      *
      * - fileName: name, which should be used to attach file.
@@ -373,7 +373,7 @@ class Message extends BaseMessage
 
         $cid = md5($path). '@phpmailer.0'; //RFC2392 S 2
 
-        $this->mailer->adapter->addEmbeddedImage($path, $cid, $name, $encoding, $type, $disposition);
+        $this->mailer->adapter->addEmbeddedImage(\Yii::getAlias($path, false), $cid, $name, $encoding, $type, $disposition);
 
         return $cid;
     }
