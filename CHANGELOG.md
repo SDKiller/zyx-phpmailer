@@ -1,7 +1,9 @@
-0.9.2 - under development
+0.9.2 (PHPMailer stable), May 15, 2014
 -----------------------------
 
 - Enh: Replaced '$path' with [[Yii::getAlias($path, false)]] in [[Message::attach()]] and [[Message::embed()]] methods.
+- Chg: Updated phpmailer stable version to 'v5.2.8' in composer.json.
+
 
 0.9.1 (PHPMailer stable), May 6, 2014
 -----------------------------
