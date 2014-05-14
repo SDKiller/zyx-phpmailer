@@ -38,9 +38,7 @@ at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
 
 During the extension installation [PHPMailer](https://github.com/PHPMailer/PHPMailer) library will be also installed.
 
-You have two options here - to install latest **stable** release of **PHPMailer** (as of now it is 5.2.7) or install
-latest development version from **dev-master** (you are encouraged to do so as many significant issues were solved and
-improvements made since last stable release, but anyway **_the choice is up to you_**).
+You have two options here - to install latest **stable** release of **PHPMailer** (as of now it is 5.2.8 - many significant issues were solved and improvements made in this release) or install latest development version from **dev-master**.
 
 
 So, either run
