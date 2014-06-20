@@ -8,6 +8,7 @@ PHPMailer integration for Yii 2 framework
 [![Latest Unstable Version](https://poser.pugx.org/zyx/zyx-phpmailer/v/unstable.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
 [![Total Downloads](https://poser.pugx.org/zyx/zyx-phpmailer/downloads.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
 [![License](https://poser.pugx.org/zyx/zyx-phpmailer/license.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
+[![Code Climate](https://codeclimate.com/github/SDKiller/zyx-phpmailer.png)](https://codeclimate.com/github/SDKiller/zyx-phpmailer)
 
 
 
