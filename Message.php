@@ -236,7 +236,7 @@ class Message extends BaseMessage
      *
      * We also try to make possible to call [[setHtmlBody()]] from elsewhere, not only from [[compose()]],
      * for simple cases, when we have no params to pass to the view to build html, just text.
-     * Another usecase is when you don't want to render views and layouts an build html message on-the-fly.
+     * Another usecase is when you don't want to render views and layouts and build html message on-the-fly.
      * Othervise you do everything via Mailer [[compose()]] function, passing params their.
      */
     public function setHtmlBody($input)
@@ -382,14 +382,14 @@ class Message extends BaseMessage
         $result = array();
 
         foreach ($source as $data) {
-            $source[$data[0]] = (isset($data[1])) ? $data[1] : '';
+            $result[$data[0]] = (isset($data[1])) ? $data[1] : '';
         }
 
         return $result;
     }
 
     /**
-     * Creates uniform recipients array for phpMailer' [[addAnAddress]] method (as 'email' => 'name' pairs),
+     * Creates uniform recipients array for phpMailer's [[addAnAddress]] method (as 'email' => 'name' pairs),
      * because in \yii\mail\MessageInterface by design recipients may be defined in different ways
      *
      * @param string|array $addr copy receiver email address.
