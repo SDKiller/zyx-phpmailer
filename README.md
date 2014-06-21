@@ -8,6 +8,7 @@ PHPMailer integration for Yii 2 framework
 [![Latest Unstable Version](https://poser.pugx.org/zyx/zyx-phpmailer/v/unstable.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
 [![Total Downloads](https://poser.pugx.org/zyx/zyx-phpmailer/downloads.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
 [![License](https://poser.pugx.org/zyx/zyx-phpmailer/license.png)](https://packagist.org/packages/zyx/zyx-phpmailer)
+[![Code Climate](https://codeclimate.com/github/SDKiller/zyx-phpmailer.png)](https://codeclimate.com/github/SDKiller/zyx-phpmailer)
 
 
 
@@ -38,9 +39,7 @@ at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
 
 During the extension installation [PHPMailer](https://github.com/PHPMailer/PHPMailer) library will be also installed.
 
-You have two options here - to install latest **stable** release of **PHPMailer** (as of now it is 5.2.7) or install
-latest development version from **dev-master** (you are encouraged to do so as many significant issues were solved and
-improvements made since last stable release, but anyway **_the choice is up to you_**).
+You have two options here - to install latest **stable** release of **PHPMailer** (as of now it is 5.2.8 - many significant issues were solved and improvements made in this release) or install latest development version from **dev-master**.
 
 
 So, either run

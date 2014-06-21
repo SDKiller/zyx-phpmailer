@@ -50,22 +50,13 @@ class Message extends BaseMessage
      */
     public function setFrom($from)
     {
+        $recipients = $this->normalizeRecipients($from);
+
         //see RFC2822 3.6.2 'Originator fields' - multiple 'From' is allowed...
-        if (is_string($from)) {
-            //consider it as 'email'
-            $this->mailer->adapter->setFrom($from, '');
-        } elseif (is_array($from)) {
-            foreach ($from as $key => $value) {
-                if (is_int($key)) {
-                    //consider it as numeric array of 'emails'
-                    $this->mailer->adapter->setFrom($value, '');
-                } else {
-                    //consider it as ['email' => 'name'] pairs
-                    $this->mailer->adapter->setFrom($key, $value);
-                }
-                //...but anyway PHPMailer consideres it should be single 'From', so we stop processing array
-                break;
-            }
+        foreach ($recipients as $email => $name) {
+            $this->mailer->adapter->setFrom($email, $name);
+            //...but anyway PHPMailer consideres it should be single 'From', so we stop processing array
+            break;
         }
 
         return $this;
@@ -90,19 +81,10 @@ class Message extends BaseMessage
      */
     public function setTo($to)
     {
-        if (is_string($to)) {
-            //consider it as 'email'
-            $this->mailer->adapter->addAddress($to, '');
-        } elseif (is_array($to)) {
-            foreach ($to as $key => $value) {
-                if (is_int($key)) {
-                    //consider it as numeric array of 'emails'
-                    $this->mailer->adapter->addAddress($value, '');
-                } else {
-                    //consider it as ['email' => 'name'] pairs
-                    $this->mailer->adapter->addAddress($key, $value);
-                }
-            }
+        $recipients = $this->normalizeRecipients($to);
+
+        foreach ($recipients as $email => $name) {
+            $this->mailer->adapter->addAddress($email, $name);
         }
 
         return $this;
@@ -129,19 +111,10 @@ class Message extends BaseMessage
      */
     public function setReplyTo($replyTo)
     {
-        if (is_string($replyTo)) {
-            //consider it as 'email'
-            $this->mailer->adapter->addReplyTo($replyTo, '');
-        } elseif (is_array($replyTo)) {
-            foreach ($replyTo as $key => $value) {
-                if (is_int($key)) {
-                    //consider it as numeric array of 'emails'
-                    $this->mailer->adapter->addReplyTo($value, '');
-                } else {
-                    //consider it as ['email' => 'name'] pairs
-                    $this->mailer->adapter->addReplyTo($key, $value);
-                }
-            }
+        $recipients = $this->normalizeRecipients($replyTo);
+
+        foreach ($recipients as $email => $name) {
+            $this->mailer->adapter->addReplyTo($email, $name);
         }
 
         return $this;
@@ -170,19 +143,10 @@ class Message extends BaseMessage
      */
     public function setCc($cc)
     {
-        if (is_string($cc)) {
-            //consider it as 'email'
-            $this->mailer->adapter->addCC($cc, '');
-        } elseif (is_array($cc)) {
-            foreach ($cc as $key => $value) {
-                if (is_int($key)) {
-                    //consider it as numeric array of 'emails'
-                    $this->mailer->adapter->addCC($value, '');
-                } else {
-                    //consider it as ['email' => 'name'] pairs
-                    $this->mailer->adapter->addCC($key, $value);
-                }
-            }
+        $recipients = $this->normalizeRecipients($cc);
+
+        foreach ($recipients as $email => $name) {
+            $this->mailer->adapter->addCC($email, $name);
         }
 
         return $this;
@@ -209,19 +173,10 @@ class Message extends BaseMessage
      */
     public function setBcc($bcc)
     {
-        if (is_string($bcc)) {
-            //consider it as 'email'
-            $this->mailer->adapter->addBCC($bcc, '');
-        } elseif (is_array($bcc)) {
-            foreach ($bcc as $key => $value) {
-                if (is_int($key)) {
-                    //consider it as numeric array of 'emails'
-                    $this->mailer->adapter->addBCC($value, '');
-                } else {
-                    //consider it as ['email' => 'name'] pairs
-                    $this->mailer->adapter->addBCC($key, $value);
-                }
-            }
+        $recipients = $this->normalizeRecipients($bcc);
+
+        foreach ($recipients as $email => $name) {
+            $this->mailer->adapter->addBCC($email, $name);
         }
 
         return $this;
@@ -281,21 +236,24 @@ class Message extends BaseMessage
      *
      * We also try to make possible to call [[setHtmlBody()]] from elsewhere, not only from [[compose()]],
      * for simple cases, when we have no params to pass to the view to build html, just text.
+     * Another usecase is when you don't want to render views and layouts an build html message on-the-fly.
      * Othervise you do everything via Mailer [[compose()]] function, passing params their.
      */
     public function setHtmlBody($input)
     {
-        if (array_key_exists('ishtml', $this->mailer->config) && $this->mailer->config['ishtml'] === false) {
-            //prevent sending html messages if it is explicitly denied in application config
+        if (array_key_exists('ishtml', $this->mailer->config) && $this->mailer->config['ishtml'] === false
+            || (empty($this->mailer->htmlView) && empty($this->mailer->htmlLayout))
+        ) {
+            //prevent sending html messages if it is explicitly denied in application config or no view and layout is set
             $this->setTextBody($input);
         } else {
             if (preg_match('|<body[^>]*>(.*?)</body>|is', $input) != 1) {
                 //html was not already rendered by view - lets do it
                 if (empty($this->mailer->htmlView)) {
-                    $html = $this->mailer->render($this->mailer->htmlLayout, ['content' => $input], false);
+                    $html = $this->mailer->render($this->mailer->htmlLayout, ['content' => $input, 'message' => $this], false);
                 } else {
                     //The most simple case is supposed here - your html view file should use '$text' variable
-                    $html = $this->mailer->render($this->mailer->htmlView, ['text' => $input], $this->mailer->htmlLayout);
+                    $html = $this->mailer->render($this->mailer->htmlView, ['text' => $input, 'message' => $this], $this->mailer->htmlLayout);
                 }
             } else {
                 $html = $input;
@@ -414,7 +372,7 @@ class Message extends BaseMessage
 
 
     /**
-     * Reformat PHPMailer's recipients arrays
+     * Reformat PHPMailer's recipients arrays for Yii debug purposes
      *
      * @param   array   $source
      * @return  array
@@ -428,6 +386,35 @@ class Message extends BaseMessage
         }
 
         return $result;
+    }
+
+    /**
+     * Creates uniform recipients array for phpMailer' [[addAnAddress]] method (as 'email' => 'name' pairs),
+     * because in \yii\mail\MessageInterface by design recipients may be defined in different ways
+     *
+     * @param string|array $addr copy receiver email address.
+     * @return array
+     */
+    private function normalizeRecipients($addr)
+    {
+        $recipients = array();
+
+        if (is_string($addr)) {
+            //consider it as 'email'
+            $recipients[$addr] = '';
+        } elseif (is_array($addr)) {
+            foreach ($addr as $key => $value) {
+                if (is_int($key)) {
+                    //consider it as numeric array of 'emails'
+                    $recipients[$value] = '';
+                } else {
+                    //consider it as ['email' => 'name'] pairs
+                    $recipients[$key] = $value;
+                }
+            }
+        }
+
+        return $recipients;
     }
 
 

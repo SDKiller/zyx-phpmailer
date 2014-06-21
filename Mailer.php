@@ -90,7 +90,7 @@ class Mailer extends BaseMailer
      */
     public function compose($view = null, array $params = [])
     {
-        //attempt to override default layouts dinamically
+        //attempt to override default layouts dynamically
         if (array_key_exists('htmlLayout', $params)) {
             $this->htmlLayout = $params['htmlLayout'];
             unset($params['htmlLayout']);
@@ -116,7 +116,8 @@ class Mailer extends BaseMailer
                 if (isset($view['html'])) {
                     $this->htmlView = $view['html'];
                     if (sizeof($params) > 1) {
-                        //render view only if something is passed to it, othervise consider we just wanted to setup view
+                        //render view only if something is passed to it
+                        //othervise consider we just wanted to setup view to call [[setHtmlBody()]] later
                         $html = $this->render($this->htmlView, $params, $this->htmlLayout);
                     }
                 } elseif (isset($view['text'])) {
@@ -131,7 +132,8 @@ class Mailer extends BaseMailer
                 //string argument is considered as html view by BaseMailer - preserve that behavior
                 $this->htmlView = $view;
                 if (sizeof($params) > 1) {
-                    //render view only if something is passed to it, othervise consider we just wanted to setup view
+                    //render view only if something is passed to it
+                    //othervise consider we just wanted to setup view to call [[setHtmlBody()]] later
                     $html = $this->render($this->htmlView, $params, $this->htmlLayout);
                 }
             }
@@ -255,16 +257,24 @@ class Mailer extends BaseMailer
      * @var string  $body          the email body
      * @var string  $from          email address of sender
      */
-    public function processResult($result, $to = '', $cc = '', $bcc = '', $subject = '', $body = '', $from = '')
+    public static function processResult($result, $to = '', $cc = '', $bcc = '', $subject = '', $body = '', $from = '')
     {
         self::$success = $result;
 
         if (YII_DEBUG) {
+
+            $msg = ' - Sending email. ';
             //native PHPMailer's way to pass results to [[doCallback()]] function is a little bit strange
-            $address = (!empty($to)) ? ('To: ' . $to) : '';
-            $address .= (!empty($cc)) ? ('Cc: ' . $cc) : '';
-            $address .= (!empty($bcc)) ? ('Bcc: ' . $bcc) : '';
-            Yii::info(((($result) ? 'OK' : 'FAILED') . ' - Sending email ' . $address . ' "' . $subject . '"'), 'application');
+            $msg .= (!empty($to)) ? ('To: ' . (is_array($to) ? implode(';', $to) : $to) . '.') : '';
+            $msg .= (!empty($cc)) ? ('Cc: ' . (is_array($cc) ? implode(';', $cc) : $cc) . '.') : '';
+            $msg .= (!empty($bcc)) ? ('Bcc: ' . (is_array($bcc) ? implode(';', $bcc) : $bcc) . '.') : '';
+
+            $msg .= ' Subject: "' . $subject . '"';
+            if ($result) {
+                Yii::info('OK' . $msg, __METHOD__);
+            } else {
+                Yii::warning('FAILED' . $msg, __METHOD__);
+            }
         }
     }
 
