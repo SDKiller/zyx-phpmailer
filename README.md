@@ -1,6 +1,13 @@
 zyx-phpmailer
 =============
 
+### WARNING !!!
+
+BC-breaking changes in Yii2 Framework!!! Update of README coming soon.
+
+For details see https://github.com/yiisoft/yii2/issues/4071
+
+
 PHPMailer integration for Yii 2 framework
 -----------------------------------------
 
