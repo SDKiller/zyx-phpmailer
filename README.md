@@ -11,10 +11,10 @@ PHPMailer integration for Yii 2 framework
 [![Code Climate](https://codeclimate.com/github/SDKiller/zyx-phpmailer.png)](https://codeclimate.com/github/SDKiller/zyx-phpmailer)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SDKiller/zyx-phpmailer/badges/quality-score.png)](https://scrutinizer-ci.com/g/SDKiller/zyx-phpmailer/)
 
-
+===
 ### WARNING !!!
 
-Breaking backwards compatibility changes were introduced in Yii2 Framework in https://github.com/yiisoft/yii2/issues/4071
+Breaking backwards compatibility changes were introduced in Yii2 Framework (see https://github.com/yiisoft/yii2/issues/4071).
 
 If you updated after 26.06.2014 your should fix your application config and calls to mail functions (replace `mail` with `mailer`).
 
@@ -38,9 +38,9 @@ In your code replace:
 
 `Yii::$app->mail->...` with `Yii::$app->mailer->...` 
 
-(or `Yii::$app->getMail->...` with `Yii::$app->getMailer->...` respectively).
+(or `Yii::$app->getMail()...` with `Yii::$app->getMailer()...` respectively).
 
-
+===
 
 
 This extension adds integration of popular **[PHPMailer](https://github.com/PHPMailer/PHPMailer)** library -
