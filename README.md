@@ -3,9 +3,29 @@ zyx-phpmailer
 
 ### WARNING !!!
 
-BC-breaking changes in Yii2 Framework!!! Update of README coming soon.
+Breaking backwards compatibility changes were introduced in Yii2 Framework in https://github.com/yiisoft/yii2/issues/4071
 
-For details see https://github.com/yiisoft/yii2/issues/4071
+If you updated after 26.06.2014 your should fix your application config and calls to mail functions (replace `mail` with `mailer`).
+
+In configuration file you should replace:
+
+```
+	'components' => [
+        'mail' => [
+        ...
+```
+
+with
+
+```
+	'components' => [
+        'mailer' => [
+        ...
+```
+
+In your code replace:
+
+`Yii::$app->mail->...` with `Yii::$app->mailer->...` (or `Yii::$app->getMail->...` with `Yii::$app->getMailer->...` respectively).
 
 
 PHPMailer integration for Yii 2 framework
@@ -122,7 +142,7 @@ It may be like the following:
 return [
 //....
 	'components' => [
-        'mail' => [
+        'mailer' => [
             'class'            => 'zyx\phpmailer\Mailer',
             'viewPath'         => '@common/mail',
             'useFileTransport' => false,
@@ -158,7 +178,7 @@ it every time when composing message:
 
 ```
     ...
-    'mail' => [
+    'mailer' => [
         ...
         'messageConfig'    => [
          'from' => ['noreply@example.com' => 'My Example Site']
@@ -176,7 +196,7 @@ USAGE
 Example of simple usage:
 
 ```
-Yii::$app->mail->compose()
+Yii::$app->mailer->compose()
      ->setFrom(['noreply@example.com' => 'My Example Site'])
      ->setTo([$form->email => $form->name])
      ->setSubject($form->subject)
@@ -187,7 +207,7 @@ Yii::$app->mail->compose()
 Example of sending html emails rendering view and layout (assumed that default 'From' is set in application configuration file):
 
 ```
-Yii::$app->mail->compose('passwordResetToken', ['user'       => $user,
+Yii::$app->mailer->compose('passwordResetToken', ['user'       => $user,
                                                 'title'      => Yii::t('app', 'Password reset'),
                                                 'htmlLayout' => 'layouts/html-reset'])
                 ->setTo($this->email)
