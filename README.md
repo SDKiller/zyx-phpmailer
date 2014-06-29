@@ -37,6 +37,7 @@ with
 In your code replace:
 
 `Yii::$app->mail->...` with `Yii::$app->mailer->...` 
+
 (or `Yii::$app->getMail->...` with `Yii::$app->getMailer->...` respectively).
 
 
