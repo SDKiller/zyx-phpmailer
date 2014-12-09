@@ -17,7 +17,14 @@ namespace zyx\phpmailer;
 
 class Adapter extends \PHPMailer
 {
-
+    /**
+     * Returns the PHPMailer Version number.
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->Version;
+    }
 
     /**
      * Sets the callback function to return results from PHPMailer (see PHPMailer property '$action_function')
@@ -150,6 +157,32 @@ class Adapter extends \PHPMailer
     public function getMessageDate()
     {
         return $this->MessageDate;
+    }
+
+    /**
+     * @access public
+     * @return void
+     */
+    public function resetMailer()
+    {
+        $this->Subject        = '';
+        $this->Body           = '';
+        $this->AltBody        = '';
+        $this->MIMEBody       = '';
+        $this->MIMEHeader     = '';
+        $this->mailHeader     = '';
+        $this->MessageID      = '';
+        $this->MessageDate    = '';
+        $this->to             = array();
+        $this->cc             = array();
+        $this->bcc            = array();
+        $this->ReplyTo        = array();
+        $this->all_recipients = array();
+        $this->attachment     = array();
+        $this->CustomHeader   = array();
+        $this->lastMessageID  = '';
+        $this->message_type   = '';
+        $this->boundary       = array();
     }
 
 

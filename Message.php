@@ -301,7 +301,7 @@ class Message extends BaseMessage
      */
     public function attachContent($content, array $options = [])
     {
-        $filename    = isset($options['fileName']) ? $options['fileName'] : (uniqid('file_') . '.txt'); //fallback
+        $filename    = isset($options['fileName']) ? $options['fileName'] : (md5(uniqid('', true)) . '.txt'); //fallback
         $type        = isset($options['contentType']) ? $options['contentType'] : '';
         $encoding    = isset($options['encoding']) ? $options['encoding'] : 'base64';
         $disposition = isset($options['disposition']) ? $options['disposition'] : 'attachment';
@@ -349,7 +349,7 @@ class Message extends BaseMessage
      */
     public function embedContent($content, array $options = [])
     {
-        $name        = isset($options['fileName']) ? $options['fileName'] : (uniqid('file_') . '.jpg'); //fallback
+        $name        = isset($options['fileName']) ? $options['fileName'] : (md5(uniqid('', true)) . '.jpg'); //fallback
         $type        = isset($options['contentType']) ? $options['contentType'] : '';
         $encoding    = isset($options['encoding']) ? $options['encoding'] : 'base64';
         $disposition = isset($options['disposition']) ? $options['disposition'] : 'inline';

@@ -82,7 +82,10 @@ class Mailer extends BaseMailer
         //Set current message date initially - a workaround for MessageDate bug in PHPMailer <= 5.2.7
         //see https://github.com/PHPMailer/PHPMailer/pull/227
 
-        $this->adapter->setMessageDate();
+        if (version_compare($this->adapter->getVersion(), '5.2.7', '<=') && $this->adapter->getMessageDate() == '') {
+            $this->adapter->setMessageDate();
+        }
+
     }
 
     /**
@@ -180,7 +183,10 @@ class Mailer extends BaseMailer
         } else {
             $isSuccessful = $this->sendMessage($message);
         }
+
         $this->afterSend($message, $isSuccessful);
+
+        $this->adapter->resetMailer();
 
         return $isSuccessful;
     }
