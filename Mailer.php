@@ -9,6 +9,7 @@ namespace zyx\phpmailer;
 
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
 use yii\mail\BaseMailer;
 
 
@@ -23,9 +24,9 @@ class Mailer extends BaseMailer
      */
     public $adapter;
     /**
-     * @var array $config - configuration array of initial phpMailer settings
+     * @var array $config - configuration array of initial phpMailer settings, defined in 'components' => 'mail' => 'config' => [...]
      */
-    public $config;
+    public $config = [];
     /**
      * @var bool $success - the result which has been passed by PHPMailer to our callback function
      * (it was designed as static property to avoid 'Using this when not in object context' error on callback)
@@ -53,30 +54,30 @@ class Mailer extends BaseMailer
     {
         $this->adapter = new Adapter();
 
-        //setting public properties defined in 'components' => 'mail' => 'config' => [...]
-        if (!empty($this->config) && is_array($this->config)) {
+        if (!is_array($this->config)) {
+            throw new InvalidConfigException('Mailer config should be set in terms of array');
+        }
+
+        if (!empty($this->config)) {
+            //special handling of language
+            $this->adapter->setLanguage(ArrayHelper::remove($this->config, 'language', Yii::$app->language));
+
+            //special handling of callback (see definition of \PHPMailer::$action_function)
+            $this->adapter->setCallback(ArrayHelper::remove($this->config, 'callback', 'zyx\phpmailer\Mailer::processResult'));
+
+            //special hadling of charset. Note: PHPMailer in [[createBody()]] overrides charset and sets 'us-ascii' if no 8-bit chars are found!
+            $this->adapter->setCharset(!empty($this->messageConfig['charset']) ? $this->messageConfig['charset'] : ArrayHelper::remove($this->config, 'charset', Yii::$app->charset));
+
+            //special handling of our 'global' isHTML switch
+            $this->adapter->isHTML((bool)ArrayHelper::remove($this->config, 'ishtml', false));
+
+            //set other properties, compliant with PHPMailer's configuration public properties
             foreach (get_object_vars($this->adapter) as $prop => $value) {
                 $key = strtolower($prop);
                 if (array_key_exists($key, $this->config)) {
                     $this->adapter->$prop = $this->config[$key];
                 }
             }
-            if (!empty($this->config['ishtml'])) {
-                $this->adapter->isHTML(true);
-            } else {
-                $this->adapter->isHTML(false);
-            }
-        }
-
-        //Note: PHPMailer in [[createBody()]] overrides charset and sets 'us-ascii' if no 8-bit chars are found!
-        if (empty($this->config['charset']) && empty($this->messageConfig['charset'])) {
-            $this->adapter->setCharset(Yii::$app->charset);
-        }
-        if (empty($this->config['language'])) {
-            $this->adapter->setLanguage(Yii::$app->language);
-        }
-        if (empty($this->config['callback'])) {
-            $this->adapter->setCallback('zyx\phpmailer\Mailer::processResult');
         }
 
         //Set current message date initially - a workaround for MessageDate bug in PHPMailer <= 5.2.7
