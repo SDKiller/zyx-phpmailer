@@ -18,6 +18,12 @@ namespace zyx\phpmailer;
 class Adapter extends \PHPMailer
 {
     /**
+     * @var callable Advanced html2text converter (bundled was removed for license reasons in https://github.com/PHPMailer/PHPMailer/issues/232)
+    */
+    public $html2textHandler = '\Html2Text\Html2Text::convert';
+
+
+    /**
      * Returns the PHPMailer Version number.
      * @return string
      */
@@ -90,6 +96,18 @@ class Adapter extends \PHPMailer
     public function getSubject()
     {
         return $this->Subject;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function html2text($html, $advanced = false)
+    {
+        if ($advanced === true && is_callable($this->html2textHandler)) {
+            $advanced = $this->html2textHandler;
+        }
+
+        return parent::html2text($html, $advanced);
     }
 
     /**
