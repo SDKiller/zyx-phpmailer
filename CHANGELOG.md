@@ -5,6 +5,7 @@
 - Bug: Error in formatting mail recipients array for yii2-debug MailPanel (to, reply, cc, bcc not shown)
 - Enh: Refactored some methods to avoid duplicate code. 
 - Enh: Added method `Adapter::getVersion()`. Minor improvements and code style.
+- Chg: Added external html2text tool in "require" (see https://github.com/PHPMailer/PHPMailer/issues/232)
 
 0.9.2 (PHPMailer stable), May 15, 2014
 -----------------------------
