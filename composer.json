@@ -1,5 +1,5 @@
 {
-    "name": "zyx/zyx-phpmailer",
+    "name": "inttegrum/zyx-phpmailer",
     "description": "PHPMailer integration for Yii 2 framework",
     "keywords": ["yii2", "phpmailer", "mail", "email", "mailer"],
     "type": "yii2-extension",
