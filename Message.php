@@ -5,10 +5,10 @@
  * @license BSD 3-Clause, see LICENSE.md
  */
 
-namespace zyx\phpmailer;
+namespace inttegrum\phpmailer;
 
 use yii\mail\BaseMessage;
-use zyx\phpmailer\Mailer;
+use inttegrum\phpmailer\Mailer;
 
 
 class Message extends BaseMessage
