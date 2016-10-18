@@ -5,7 +5,7 @@
  * @license BSD 3-Clause, see LICENSE.md
  */
 
-namespace zyx\phpmailer;
+namespace inttegrum\phpmailer;
 
 
 /**
