@@ -21,6 +21,6 @@
         "soundasleep/html2text": "*"
     },
     "autoload": {
-        "psr-4": { "zyx\\phpmailer\\": "" }
+        "psr-4": { "inttegrum\\phpmailer\\": "" }
     }
 }
