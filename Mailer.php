@@ -5,7 +5,7 @@
  * @license BSD 3-Clause, see LICENSE.md
  */
 
-namespace zyx\phpmailer;
+namespace inttegrum\phpmailer;
 
 use Yii;
 use yii\base\InvalidConfigException;
@@ -18,7 +18,7 @@ class Mailer extends BaseMailer
     /**
      * @var string $messageClass - message default class name
      */
-    public $messageClass = 'zyx\phpmailer\Message';
+    public $messageClass = 'inttegrum\phpmailer\Message';
     /**
      * @var Adapter $adapter - instance extended from phpMailer class
      */

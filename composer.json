@@ -1,5 +1,5 @@
 {
-    "name": "zyx/zyx-phpmailer",
+    "name": "inttegrum/zyx-phpmailer",
     "description": "PHPMailer integration for Yii 2 framework",
     "keywords": ["yii2", "phpmailer", "mail", "email", "mailer"],
     "type": "yii2-extension",
@@ -7,7 +7,7 @@
     "support": {
         "issues": "https://github.com/SDKiller/zyx-phpmailer/issues",
         "wiki": "https://github.com/SDKiller/zyx-phpmailer/wiki",
-        "source": "https://github.com/SDKiller/zyx-phpmailer"
+        "source": "https://github.com/inttegrum/zyx-phpmailer"
     },
     "authors": [
         {
@@ -15,13 +15,12 @@
             "email": "jexy.ru@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "yiisoft/yii2": "*",
         "phpmailer/phpmailer": "*",
         "soundasleep/html2text": "*"
     },
     "autoload": {
-        "psr-4": { "zyx\\phpmailer\\": "" }
+        "psr-4": { "inttegrum\\phpmailer\\": "" }
     }
 }
