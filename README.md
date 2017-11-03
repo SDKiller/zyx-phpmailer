@@ -14,32 +14,9 @@ PHPMailer integration for Yii 2 framework
 ===
 ### WARNING !!!
 
-Breaking backwards compatibility changes were introduced in Yii2 Framework (see https://github.com/yiisoft/yii2/issues/4071).
+PHPMailer 6 was released with some breaking backwards compatibility changes and minimum requirement of php 5.5.
 
-If you updated after 26.06.2014 your should fix your application config and calls to mail functions (replace `mail` with `mailer`).
-
-In configuration file you should replace:
-
-```
-	'components' => [
-        'mail' => [
-        ...
-```
-
-with
-
-```
-	'components' => [
-        'mailer' => [
-        ...
-```
-
-In your code replace:
-
-`Yii::$app->mail->...` with `Yii::$app->mailer->...` 
-
-(or `Yii::$app->getMail()...` with `Yii::$app->getMailer()...` respectively).
-
+This package does not yet supports PHPMailer 6 (work on its support is in progress, but there is no due date at the moment).
 ===
 
 
@@ -68,49 +45,28 @@ INSTALLATION
 If you do not have [Composer](http://getcomposer.org/), you may install it by following the instructions
 at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
 
-During the extension installation [PHPMailer](https://github.com/PHPMailer/PHPMailer) library will be also installed.
-
-You have two options here - to install latest **stable** release of **PHPMailer** (as of now it is 5.2.8 - many significant issues were solved and improvements made in this release) or install latest development version from **dev-master**.
+During the extension installation [PHPMailer](https://github.com/PHPMailer/PHPMailer) library will be also installed
+(if not already present in your prject).
 
 
 So, either run
 
-- for PHPMailer stable:
-
 ```
-php composer.phar require --prefer-dist zyx/zyx-phpmailer "@stable"
+php composer.phar require --prefer-dist zyx/zyx-phpmailer "*"
 ```
-
-- for dev:
-
-```
-php composer.phar require --prefer-dist zyx/zyx-phpmailer "dev-master"
-```
-
 
 or add respectively:
 
 ```
-"zyx/zyx-phpmailer": "@stable"
-```
-
-or
-
-```
-"zyx/zyx-phpmailer": "dev-master"
+"zyx/zyx-phpmailer": "*"
 ```
 
 to the require section of your composer.json.
 
 
-**Note:** this can be affected by 'minimum-stability' settings in your project root composer.json file. If you see error
-trying to install 'dev-master' branch of PHPMailer you should explicitly point to it, adding
-
-```
-"phpmailer/phpmailer": "dev-master"
-```
-
-to the require section of composer.json in your project root.
+**Note:** this can be affected by 'minimum-stability' settings in your project root composer.json file.
+If you want to install version with stability other than 'minimum-stability' of your project, you should explicitly
+point to it in the require section of composer.json in your project root.
 
 
 
@@ -163,7 +119,8 @@ return [
 ];
 ```
 
-This is the tipical configuration for sending email via smtp.
+This is the tipical configuration for sending email via yandex smtp.
+
 If you are familiar with PHPMailer, you can see that 'config' array holds settings, similar to corresponding
 PHPMailer properties. They will be populated when Mailer is initialized.
 
