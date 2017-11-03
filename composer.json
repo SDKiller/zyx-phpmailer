@@ -15,7 +15,6 @@
             "email": "jexy.ru@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "yiisoft/yii2": "*",
         "phpmailer/phpmailer": "~5.2.25",
