@@ -52,13 +52,13 @@ During the extension installation [PHPMailer](https://github.com/PHPMailer/PHPMa
 So, either run
 
 ```
-php composer.phar require --prefer-dist zyx/zyx-phpmailer "*"
+php composer.phar require --prefer-dist zyx/zyx-phpmailer "^0.9.4"
 ```
 
 or add respectively:
 
 ```
-"zyx/zyx-phpmailer": "*"
+"zyx/zyx-phpmailer": "^0.9.4"
 ```
 
 to the require section of your composer.json.
