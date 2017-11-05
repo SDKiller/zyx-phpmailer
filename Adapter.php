@@ -1,27 +1,26 @@
 <?php
 /**
- * @link https://github.com/SDKiller/zyx-phpmailer
- * @copyright Copyright (c) 2014 Serge Postrash
- * @license BSD 3-Clause, see LICENSE.md
+ * @link      https://github.com/SDKiller/zyx-phpmailer
+ * @copyright Copyright (c) 2014-2017 Serge Postrash
+ * @license   BSD 3-Clause, see LICENSE.md
  */
 
 namespace zyx\phpmailer;
 
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
- * A wrapper class to resolve some inconsistencies across original PHPMailer versions
- * (i.e. some missing setters and getters, etc.)
+ * A wrapper class to resolve some inconsistencies both with \yii\mail\BaseMailer and PHPMailer
  *
  * @package zyx\phpmailer
  */
-
-class Adapter extends \PHPMailer
+class Adapter extends PHPMailer
 {
     /**
      * @var callable Advanced html2text converter
      * (bundled `html2text` was removed for license reasons in https://github.com/PHPMailer/PHPMailer/issues/232)
-    */
-    public $html2textHandler = '\Html2Text\Html2Text::convert';
+     */
+    public $html2textHandler;
 
 
     /**
@@ -30,13 +29,13 @@ class Adapter extends \PHPMailer
      */
     public function getVersion()
     {
-        return $this->Version;
+        return parent::VERSION;
     }
 
     /**
      * Sets the callback function to return results from PHPMailer (see PHPMailer property '$action_function')
-     * @param   callable $callback character set name.
-     * @return  void
+     * @param callable $callback character set name.
+     * @return void
      */
     public function setCallback($callback)
     {
@@ -77,7 +76,7 @@ class Adapter extends \PHPMailer
      */
     public function getFromFull()
     {
-        return array($this->From => $this->FromName);
+        return [$this->From => $this->FromName];
     }
 
     /**
@@ -127,7 +126,6 @@ class Adapter extends \PHPMailer
 
     /**
      * Allows for public read access to 'MIMEHeader' property.
-     * @access public
      * @return string
      */
     public function getMIMEHeader()
@@ -137,7 +135,6 @@ class Adapter extends \PHPMailer
 
     /**
      * Allows for public read access to 'mailHeader' property.
-     * @access public
      * @return string
      */
     public function getMailHeader()
@@ -147,7 +144,6 @@ class Adapter extends \PHPMailer
 
     /**
      * Allows for public read access to 'MIMEBody' property.
-     * @access public
      * @return string
      */
     public function getMIMEBody()
@@ -156,9 +152,8 @@ class Adapter extends \PHPMailer
     }
 
     /**
-     * @access  public
-     * @param   int     $timestamp
-     * @return  void
+     * @param int $timestamp
+     * @return void
      */
     public function setMessageDate($timestamp = null)
     {
@@ -171,7 +166,6 @@ class Adapter extends \PHPMailer
     }
 
     /**
-     * @access public
      * @return string RFC 822 formatted message date
      */
     public function getMessageDate()
@@ -180,87 +174,27 @@ class Adapter extends \PHPMailer
     }
 
     /**
-     * @access public
      * @return void
      */
     public function resetMailer()
     {
-        $this->Subject        = '';
-        $this->Body           = '';
-        $this->AltBody        = '';
-        $this->MIMEBody       = '';
-        $this->MIMEHeader     = '';
-        $this->mailHeader     = '';
-        $this->MessageID      = '';
-        $this->MessageDate    = '';
-        $this->to             = array();
-        $this->cc             = array();
-        $this->bcc            = array();
-        $this->ReplyTo        = array();
-        $this->all_recipients = array();
-        $this->attachment     = array();
-        $this->CustomHeader   = array();
-        $this->lastMessageID  = '';
-        $this->message_type   = '';
-        $this->boundary       = array();
+        $this->Subject = '';
+        $this->Body = '';
+        $this->AltBody = '';
+        $this->MIMEBody = '';
+        $this->MIMEHeader = '';
+        $this->mailHeader = '';
+        $this->MessageID = '';
+        $this->MessageDate = '';
+        $this->to = [];
+        $this->cc = [];
+        $this->bcc = [];
+        $this->ReplyTo = [];
+        $this->all_recipients = [];
+        $this->attachment = [];
+        $this->CustomHeader = [];
+        $this->lastMessageID = '';
+        $this->message_type = '';
+        $this->boundary = [];
     }
-
-
-    /**
-     * The following getter methods for protected properties are missing in PHPMailer releases <= 5.2.7.
-     * They were introduced only in dev-master
-     * @see https://github.com/PHPMailer/PHPMailer/commit/338dd086182eaad63dcfc5e017f157b28274e30a
-     * Note: as of now this getters are used for Yii-debug mail panel purpose only.
-     */
-
-    /**
-     * Allows for public read access to 'to' property.
-     * @access public
-     * @return array
-     */
-    public function getToAddresses()
-    {
-        return $this->to;
-    }
-
-    /**
-     * Allows for public read access to 'cc' property.
-     * @access public
-     * @return array
-     */
-    public function getCcAddresses()
-    {
-        return $this->cc;
-    }
-
-    /**
-     * Allows for public read access to 'bcc' property.
-     * @access public
-     * @return array
-     */
-    public function getBccAddresses()
-    {
-        return $this->bcc;
-    }
-
-    /**
-     * Allows for public read access to 'ReplyTo' property.
-     * @access public
-     * @return array
-     */
-    public function getReplyToAddresses()
-    {
-        return $this->ReplyTo;
-    }
-
-    /**
-     * Allows for public read access to 'all_recipients' property.
-     * @access public
-     * @return array
-     */
-    public function getAllRecipientAddresses()
-    {
-        return $this->all_recipients;
-    }
-
 }

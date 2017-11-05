@@ -1,22 +1,25 @@
 <?php
 /**
  * @link https://github.com/SDKiller/zyx-phpmailer
- * @copyright Copyright (c) 2014 Serge Postrash
+ * @copyright Copyright (c) 2014-2017 Serge Postrash
  * @license BSD 3-Clause, see LICENSE.md
  */
 
 namespace zyx\phpmailer;
 
+use Yii;
 use yii\mail\BaseMessage;
-use zyx\phpmailer\Mailer;
 
-
+/**
+ * Class Message
+ * @package zyx\phpmailer
+ */
 class Message extends BaseMessage
 {
     /**
      * @var \zyx\phpmailer\Mailer $mailer the mailer instance that created this message
      */
-    public $mailer = null;
+    public $mailer;
 
 
     /**
@@ -52,10 +55,10 @@ class Message extends BaseMessage
     {
         $recipients = $this->normalizeRecipients($from);
 
-        //see RFC2822 3.6.2 'Originator fields' - multiple 'From' is allowed...
+        // see RFC2822 3.6.2 'Originator fields' - multiple 'From' is allowed...
         foreach ($recipients as $email => $name) {
             $this->mailer->adapter->setFrom($email, $name);
-            //...but anyway PHPMailer consideres it should be single 'From', so we stop processing array
+            // ...but anyway PHPMailer consideres it should be single 'From', so we stop processing array
             break;
         }
 
@@ -244,22 +247,22 @@ class Message extends BaseMessage
         if (array_key_exists('ishtml', $this->mailer->config) && $this->mailer->config['ishtml'] === false
             || (empty($this->mailer->htmlView) && empty($this->mailer->htmlLayout))
         ) {
-            //prevent sending html messages if it is explicitly denied in application config or no view and layout is set
+            // prevent sending html messages if it is explicitly denied in application config or no view and layout is set
             $this->setTextBody($input);
         } else {
             if (preg_match('|<body[^>]*>(.*?)</body>|is', $input) != 1) {
-                //html was not already rendered by view - lets do it
+                // html was not already rendered by view - lets do it
                 if (empty($this->mailer->htmlView)) {
                     $html = $this->mailer->render($this->mailer->htmlLayout, ['content' => $input, 'message' => $this], false);
                 } else {
-                    //The most simple case is supposed here - your html view file should use '$text' variable
+                    // The most simple case is supposed here - your html view file should use '$text' variable
                     $html = $this->mailer->render($this->mailer->htmlView, ['text' => $input, 'message' => $this], $this->mailer->htmlLayout);
                 }
             } else {
                 $html = $input;
             }
 
-            //TODO: check usage and default behavior of '$basedir' argument (used for images)
+            // TODO: check usage and default behavior of '$basedir' argument (used for images)
             $this->mailer->adapter->msgHTML($html, $basedir = '', true);
         }
 
@@ -284,7 +287,7 @@ class Message extends BaseMessage
         $encoding    = isset($options['encoding']) ? $options['encoding'] : 'base64';
         $disposition = isset($options['disposition']) ? $options['disposition'] : 'attachment';
 
-        $this->mailer->adapter->addAttachment(\Yii::getAlias($path, false), $name, $encoding, $type, $disposition);
+        $this->mailer->adapter->addAttachment(Yii::getAlias($path, false), $name, $encoding, $type, $disposition);
 
         return $this;
     }
@@ -329,9 +332,9 @@ class Message extends BaseMessage
         $encoding    = isset($options['encoding']) ? $options['encoding'] : 'base64';
         $disposition = isset($options['disposition']) ? $options['disposition'] : 'inline';
 
-        $cid = md5($path). '@phpmailer.0'; //RFC2392 S 2
+        $cid = md5($path). '@phpmailer.0'; // RFC2392 S 2
 
-        $this->mailer->adapter->addEmbeddedImage(\Yii::getAlias($path, false), $cid, $name, $encoding, $type, $disposition);
+        $this->mailer->adapter->addEmbeddedImage(Yii::getAlias($path, false), $cid, $name, $encoding, $type, $disposition);
 
         return $cid;
     }
@@ -354,7 +357,7 @@ class Message extends BaseMessage
         $encoding    = isset($options['encoding']) ? $options['encoding'] : 'base64';
         $disposition = isset($options['disposition']) ? $options['disposition'] : 'inline';
 
-        $cid = md5($name). '@phpmailer.0'; //RFC2392 S 2
+        $cid = md5($name). '@phpmailer.0'; // RFC2392 S 2
 
         $this->mailer->adapter->addStringEmbeddedImage($content, $cid, $name, $encoding, $type, $disposition);
 
@@ -379,7 +382,7 @@ class Message extends BaseMessage
      */
     private function reformatArray($source)
     {
-        $result = array();
+        $result = [];
 
         foreach ($source as $data) {
             $result[$data[0]] = (isset($data[1])) ? $data[1] : '';
@@ -397,18 +400,18 @@ class Message extends BaseMessage
      */
     private function normalizeRecipients($addr)
     {
-        $recipients = array();
+        $recipients = [];
 
         if (is_string($addr)) {
-            //consider it as 'email'
+            // consider it as 'email'
             $recipients[$addr] = '';
         } elseif (is_array($addr)) {
             foreach ($addr as $key => $value) {
                 if (is_int($key)) {
-                    //consider it as numeric array of 'emails'
+                    // consider it as numeric array of 'emails'
                     $recipients[$value] = '';
                 } else {
-                    //consider it as ['email' => 'name'] pairs
+                    // consider it as ['email' => 'name'] pairs
                     $recipients[$key] = $value;
                 }
             }
@@ -418,8 +421,8 @@ class Message extends BaseMessage
     }
 
 
-    //The next funtions are not present in \yii\mail\MessageInterface but who knows - may be introduced in future -
-    //some of them are nesessary for debug panel and are used to output debug info for bundled yii2-swiftmailer
+    // The next funtions are not present in \yii\mail\MessageInterface but who knows - may be introduced in future -
+    // some of them are nesessary for debug panel and are used to output debug info for bundled yii2-swiftmailer
 
     public function getMessageID()
     {
@@ -440,5 +443,4 @@ class Message extends BaseMessage
     {
         return $this->mailer->adapter->getMIMEBody();
     }
-
 }

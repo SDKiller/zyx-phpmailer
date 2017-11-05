@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://github.com/SDKiller/zyx-phpmailer
- * @copyright Copyright (c) 2014 Serge Postrash
- * @license BSD 3-Clause, see LICENSE.md
+ * @link      https://github.com/SDKiller/zyx-phpmailer
+ * @copyright Copyright (c) 2014-2017 Serge Postrash
+ * @license   BSD 3-Clause, see LICENSE.md
  */
 
 namespace zyx\phpmailer;
@@ -12,7 +12,10 @@ use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\mail\BaseMailer;
 
-
+/**
+ * Class Mailer
+ * @package zyx\phpmailer
+ */
 class Mailer extends BaseMailer
 {
     /**
@@ -35,7 +38,7 @@ class Mailer extends BaseMailer
     /**
      * @var string $htmlView - html view file, may be set as default (we introduce it in addition to default '$htmlLayout')
      */
-    public $htmlView = null;
+    public $htmlView;
 
 
     /**
@@ -59,19 +62,19 @@ class Mailer extends BaseMailer
         }
 
         if (!empty($this->config)) {
-            //special handling of language
+            // special handling of language
             $this->adapter->setLanguage(ArrayHelper::remove($this->config, 'language', Yii::$app->language));
 
-            //special handling of callback (see definition of \PHPMailer::$action_function)
+            // special handling of callback (see definition of \PHPMailer::$action_function)
             $this->adapter->setCallback(ArrayHelper::remove($this->config, 'callback', 'zyx\phpmailer\Mailer::processResult'));
 
-            //special hadling of charset. Note: PHPMailer in [[createBody()]] overrides charset and sets 'us-ascii' if no 8-bit chars are found!
+            // special hadling of charset. Note: PHPMailer in [[createBody()]] overrides charset and sets 'us-ascii' if no 8-bit chars are found!
             $this->adapter->setCharset(!empty($this->messageConfig['charset']) ? $this->messageConfig['charset'] : ArrayHelper::remove($this->config, 'charset', Yii::$app->charset));
 
-            //special handling of our 'global' isHTML switch
+            // special handling of our 'global' isHTML switch
             $this->adapter->isHTML((bool)ArrayHelper::remove($this->config, 'ishtml', false));
 
-            //set other properties, compliant with PHPMailer's configuration public properties
+            // set other properties, compliant with PHPMailer's configuration public properties
             foreach (get_object_vars($this->adapter) as $prop => $value) {
                 $key = strtolower($prop);
                 if (array_key_exists($key, $this->config)) {
@@ -80,13 +83,12 @@ class Mailer extends BaseMailer
             }
         }
 
-        //Set current message date initially - a workaround for MessageDate bug in PHPMailer <= 5.2.7
-        //see https://github.com/PHPMailer/PHPMailer/pull/227
+        // We have to preserve this workaround as MessageDate bug was reproduced again in PHPMailer v. 6.0.x
+        // see https://github.com/PHPMailer/PHPMailer/pull/227
 
-        if (version_compare($this->adapter->getVersion(), '5.2.7', '<=') && $this->adapter->getMessageDate() == '') {
+        if ($this->adapter->getMessageDate() == '') {
             $this->adapter->setMessageDate();
         }
-
     }
 
     /**
@@ -94,7 +96,7 @@ class Mailer extends BaseMailer
      */
     public function compose($view = null, array $params = [])
     {
-        //attempt to override default layouts dynamically
+        // attempt to override default layouts dynamically
         if (array_key_exists('htmlLayout', $params)) {
             $this->htmlLayout = $params['htmlLayout'];
             unset($params['htmlLayout']);
@@ -108,10 +110,10 @@ class Mailer extends BaseMailer
 
         if ($view !== null) {
 
-            //Note: we cannot process plain text and html bodies at the same time!
-            //If we mean 'multipart/alternative' - content in both HTML and plain text format cannot much differ
-            //because of anti-spam filters - see http://wiki.apache.org/spamassassin/Rules/MPART_ALT_DIFF
-            //PHPMailer autocreates alt-body - we don't need to call additionally [[setTextBody()]] like in parent method
+            // Note: we cannot process plain text and html bodies at the same time!
+            // If we mean 'multipart/alternative' - content in both HTML and plain text format cannot much differ
+            // because of anti-spam filters - see http://wiki.apache.org/spamassassin/Rules/MPART_ALT_DIFF
+            // PHPMailer autocreates alt-body - we don't need to call additionally [[setTextBody()]] like in parent method
 
             $params['message'] = $message;
 
@@ -120,12 +122,12 @@ class Mailer extends BaseMailer
                 if (isset($view['html'])) {
                     $this->htmlView = $view['html'];
                     if (sizeof($params) > 1) {
-                        //render view only if something is passed to it
-                        //othervise consider we just wanted to setup view to call [[setHtmlBody()]] later
+                        // render view only if something is passed to it
+                        // othervise consider we just wanted to setup view to call [[setHtmlBody()]] later
                         $html = $this->render($this->htmlView, $params, $this->htmlLayout);
                     }
                 } elseif (isset($view['text'])) {
-                    //keep it simple - preserve parent behavior for text rendering
+                    // keep it simple - preserve parent behavior for text rendering
                     $text = $this->render($view['text'], $params, $this->textLayout);
                     if (!empty($text)) {
                         $message->setTextBody($text);
@@ -133,11 +135,11 @@ class Mailer extends BaseMailer
                 }
 
             } else {
-                //string argument is considered as html view by BaseMailer - preserve that behavior
+                // string argument is considered as html view by BaseMailer - preserve that behavior
                 $this->htmlView = $view;
                 if (sizeof($params) > 1) {
-                    //render view only if something is passed to it
-                    //othervise consider we just wanted to setup view to call [[setHtmlBody()]] later
+                    // render view only if something is passed to it
+                    // othervise consider we just wanted to setup view to call [[setHtmlBody()]] later
                     $html = $this->render($this->htmlView, $params, $this->htmlLayout);
                 }
             }
@@ -155,9 +157,9 @@ class Mailer extends BaseMailer
      */
     protected function createMessage()
     {
-        $config = array();
+        $config = [];
 
-        //we have to put 'mailer' at the beginning of configuration array!!!
+        // we have to put 'mailer' at the beginning of configuration array!!!
         $config['mailer'] = $this;
 
         if (!array_key_exists('class', $this->messageConfig)) {
@@ -197,20 +199,20 @@ class Mailer extends BaseMailer
      */
     protected function sendMessage($message)
     {
-        //Actually PHPMailer returns 'false' on error or exception when composing message on [[preSend()]] stage,
-        //after that [[send()]] will return 'true', actual result of sending message is returned to callback function
+        // Actually PHPMailer returns 'false' on error or exception when composing message on [[preSend()]] stage,
+        // after that [[send()]] will return 'true', actual result of sending message is returned to callback function
 
         $result = $this->adapter->send();
 
         if ($result === false) {
-            //Failure on the very first step, callback function will NOT be called by PHPMailer
+            // Failure on the very first step, callback function will NOT be called by PHPMailer
             self::$success = $result;
             if (YII_DEBUG) {
                 Yii::info('FAILED - Sending email ' . implode(';', array_keys($message->getTo())) . ' "' . $message->getSubject() . '"', 'application');
             }
         }
 
-        //If not - static property will be modified by PHPMailer via our [[processResult()]] callback
+        // If not - static property will be modified by PHPMailer via our [[processResult()]] callback
 
         return self::$success;
     }
@@ -220,8 +222,8 @@ class Mailer extends BaseMailer
      */
     public function beforeSend($message)
     {
-        //actually nothing to do here
-        //parent '$event->isValid' implementation makes no sense for us if PHPMailer returns 'false' on [[send()]]
+        // actually nothing to do here
+        // parent '$event->isValid' implementation makes no sense for us if PHPMailer returns 'false' on [[send()]]
 
         return true;
     }
@@ -247,7 +249,7 @@ class Mailer extends BaseMailer
      */
     protected function saveMessage($message)
     {
-        //we have to generate message first - or [[toString()]] returns empty value
+        // we have to generate message first - or [[toString()]] returns empty value
         $this->adapter->preSend();
 
         return parent::saveMessage($message);
@@ -256,13 +258,13 @@ class Mailer extends BaseMailer
     /**
      * This is a callback function to retrieve result returned by PHPMailer
      *
-     * @var bool    $result        result of the send action
-     * @var string  $to            email address of the recipient
-     * @var string  $cc            cc email addresses
-     * @var string  $bcc           bcc email addresses
-     * @var string  $subject       the subject
-     * @var string  $body          the email body
-     * @var string  $from          email address of sender
+     * @var bool   $result  result of the send action
+     * @var string $to      email address of the recipient
+     * @var string $cc      cc email addresses
+     * @var string $bcc     bcc email addresses
+     * @var string $subject the subject
+     * @var string $body    the email body
+     * @var string $from    email address of sender
      */
     public static function processResult($result, $to = '', $cc = '', $bcc = '', $subject = '', $body = '', $from = '')
     {
@@ -271,7 +273,7 @@ class Mailer extends BaseMailer
         if (YII_DEBUG) {
 
             $msg = ' - Sending email. ';
-            //native PHPMailer's way to pass results to [[doCallback()]] function is a little bit strange
+            // native PHPMailer's way to pass results to [[doCallback()]] function is a little bit strange
             $msg .= (!empty($to)) ? ('To: ' . (is_array($to) ? implode(';', $to) : $to) . '.') : '';
             $msg .= (!empty($cc)) ? ('Cc: ' . (is_array($cc) ? implode(';', $cc) : $cc) . '.') : '';
             $msg .= (!empty($bcc)) ? ('Bcc: ' . (is_array($bcc) ? implode(';', $bcc) : $bcc) . '.') : '';
@@ -284,5 +286,4 @@ class Mailer extends BaseMailer
             }
         }
     }
-
 }

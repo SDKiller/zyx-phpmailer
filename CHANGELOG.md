@@ -1,3 +1,8 @@
+2.0.x (in progress)
+-----------------------------
+
+- Enh: PHPMailer 6 compatibility (in progress)
+
 0.9.3, November 3, 2017
 -----------------------------
 
